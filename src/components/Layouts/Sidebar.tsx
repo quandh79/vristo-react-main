@@ -523,7 +523,7 @@ const Sidebar = () => {
 
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
-                                <span>{t('user_and_pages')}</span>
+                                <span>{t('Management')}</span>
                             </h2>
 
                             <li className="menu nav-item">
@@ -547,17 +547,47 @@ const Sidebar = () => {
                                             <NavLink to="/users/user-account-settings">{t('account_settings')}</NavLink>
                                         </li> */}
                                         <li>
-                                            <NavLink to="/datatables/multi-column">{t('List')}</NavLink>
+                                            <NavLink to="/users/user-list">{t('List')}</NavLink>
                                         </li>
                                     </ul>
                                 </AnimateHeight>
                             </li>
 
                             <li className="menu nav-item">
+                                        <button type="button" className={`${currentMenu === 'invoice' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('invoice')}>
+                                            <div className="flex items-center">
+                                                <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
+                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('invoice')}</span>
+                                            </div>
+
+                                            <div className={currentMenu !== 'invoice' ? 'rtl:rotate-90 -rotate-90' : ''}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </button>
+
+                                        <AnimateHeight duration={300} height={currentMenu === 'invoice' ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li>
+                                                    <NavLink to="/apps/invoice/list">{t('list')}</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/apps/invoice/preview">{t('preview')}</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/apps/invoice/add">{t('add')}</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/apps/invoice/edit">{t('edit')}</NavLink>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
+                                    </li>
+
+                            <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'page' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('page')}>
                                     <div className="flex items-center">
                                         <IconMenuPages className="group-hover:!text-primary shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('pages')}</span>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Service')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'page' ? 'rtl:rotate-90 -rotate-90' : ''}>
@@ -567,6 +597,9 @@ const Sidebar = () => {
 
                                 <AnimateHeight duration={300} height={currentMenu === 'page' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <NavLink to="/service/service-list">{t('List')}</NavLink>
+                                        </li>
                                         <li>
                                             <NavLink to="/pages/knowledge-base">{t('knowledge_base')}</NavLink>
                                         </li>

@@ -252,16 +252,16 @@ const ListService = () => {
                                     </div>
                                 ),
                             },
-                            {
-                                accessor: 'age',
-                                title: 'Age',
-                                sortable: true,
-                                render: ({ age }) => (
-                                    <div className="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex">
-                                        <div className={`h-2.5 rounded-full rounded-bl-full text-center text-white text-xs bg-${randomColor()}`} style={{ width: `${age}%` }}></div>
-                                    </div>
-                                ),
-                            },
+                            // {
+                            //     accessor: 'age',
+                            //     title: 'Age',
+                            //     sortable: true,
+                            //     render: ({ age }) => (
+                            //         <div className="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex">
+                            //             <div className={`h-2.5 rounded-full rounded-bl-full text-center text-white text-xs bg-${randomColor()}`} style={{ width: `${age}%` }}></div>
+                            //         </div>
+                            //     ),
+                            // },
                             // { accessor: 'company', title: 'Company', sortable: true },
                             // {
                             //     accessor: 'dob',

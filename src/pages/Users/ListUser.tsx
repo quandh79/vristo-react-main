@@ -9,10 +9,11 @@ import IconBell from '../../components/Icon/IconBell';
 import IconXCircle from '../../components/Icon/IconXCircle';
 import IconPencil from '../../components/Icon/IconPencil';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
+import api from '../../services/api';
 
 const rowData = [
     {
-        id: 1,
+        id:'',
         firstName: 'Caroline',
         lastName: 'Jensen',
         email: 'carolinejensen@zidant.com',
@@ -27,7 +28,7 @@ const rowData = [
             },
         },
         phone: '+1 (821) 447-3782',
-        isActive: true,
+        is_active: true,
         age: 39,
         company: 'POLARAX',
     }
@@ -149,6 +150,33 @@ const ListUser = () => {
         return status[random];
     };
 
+    const fetchData = async () => {
+        try {
+          const response = await api.post('https://localhost:44319/api/tenant/get-all', {
+            tenant_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            flag: true,
+            page: page,
+            limit: pageSize,
+          });
+          console.log(response.data.data.items);
+          setRecordsData2(response.data.data.items);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      const handleDelete = async (id: string) => {
+        try {
+            console.log('delete' + id)
+          await api.get(`https://localhost:44319/api/tenant/delete/${id}`);
+          setRecordsData(recordsData.filter(record => record.id !== id));
+        } catch (error) {
+          console.error('Error deleting record:', error);
+        }
+      };
+      useEffect(() => {
+        fetchData();
+      }, [page, pageSize]);
+
     return (
         <div>
             <div className="panel flex items-center overflow-x-auto whitespace-nowrap p-3 text-primary">
@@ -160,75 +188,6 @@ const ListUser = () => {
                     https://www.npmjs.com/package/mantine-datatable
                 </a>
             </div>
-
-            {/* <div className="panel mt-6">
-                <div className="flex md:items-center md:flex-row flex-col mb-5 gap-5">
-                    <h5 className="font-semibold text-lg dark:text-white-light">Table 1</h5>
-                    <div className="ltr:ml-auto rtl:mr-auto">
-                        <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                    </div>
-                </div>
-                <div className="datatables">
-                    <DataTable
-                        className="whitespace-nowrap table-hover"
-                        records={recordsData}
-                        columns={[
-                            {
-                                accessor: 'firstName',
-                                title: 'Name',
-                                sortable: true,
-                                render: ({ firstName, lastName, id }) => (
-                                    <div className="flex items-center w-max">
-                                        <img className="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src={`/assets/images/profile-${id}.jpeg`} alt="" />
-                                        <div>{firstName + ' ' + lastName}</div>
-                                    </div>
-                                ),
-                            },
-                            { accessor: 'company', title: 'Company', sortable: true },
-                            { accessor: 'age', title: 'Age', sortable: true },
-                            {
-                                accessor: 'dob',
-                                title: 'Start Date',
-                                sortable: true,
-                                render: ({ dob }) => <div>{formatDate(dob)}</div>,
-                            },
-                            { accessor: 'email', title: 'Email', sortable: true },
-                            { accessor: 'phone', title: 'Phone No.', sortable: true },
-                            {
-                                accessor: 'status',
-                                title: 'Status',
-                                sortable: true,
-                                render: () => <span className={`badge bg-${randomColor()} `}>{randomStatus()}</span>,
-                            },
-                            {
-                                accessor: 'action',
-                                title: 'Action',
-                                titleClassName: '!text-center',
-                                render: () => (
-                                    <div className="flex items-center w-max mx-auto">
-                                        <Tippy content="Delete">
-                                            <button type="button">
-                                                <IconXCircle />
-                                            </button>
-                                        </Tippy>
-                                    </div>
-                                ),
-                            },
-                        ]}
-                        totalRecords={initialRecords.length}
-                        recordsPerPage={pageSize}
-                        page={page}
-                        onPageChange={(p) => setPage(p)}
-                        recordsPerPageOptions={PAGE_SIZES}
-                        onRecordsPerPageChange={setPageSize}
-                        sortStatus={sortStatus}
-                        onSortStatusChange={setSortStatus}
-                        minHeight={200}
-                        paginationText={({ from, to, totalRecords }) => `Showing  ${from} to ${to} of ${totalRecords} entries`}
-                    />
-                </div>
-            </div> */}
-
             <div className="panel mt-6">
                 <div className="flex md:items-center md:flex-row flex-col mb-5 gap-5">
                     <h5 className="font-semibold text-lg dark:text-white-light">Table 2</h5>
@@ -241,55 +200,49 @@ const ListUser = () => {
                         className="whitespace-nowrap table-hover"
                         records={recordsData2}
                         columns={[
-                            {
-                                accessor: 'firstName',
-                                title: 'Name',
-                                sortable: true,
-                                render: ({ firstName, lastName, id }) => (
-                                    <div className="flex items-center w-max">
-                                        <img className="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src={`/assets/images/profile-${id}.jpeg`} alt="" />
-                                        <div>{firstName + ' ' + lastName}</div>
-                                    </div>
-                                ),
-                            },
-                            {
-                                accessor: 'age',
-                                title: 'Age',
-                                sortable: true,
-                                render: ({ age }) => (
-                                    <div className="w-4/5 min-w-[100px] h-2.5 bg-[#ebedf2] dark:bg-dark/40 rounded-full flex">
-                                        <div className={`h-2.5 rounded-full rounded-bl-full text-center text-white text-xs bg-${randomColor()}`} style={{ width: `${age}%` }}></div>
-                                    </div>
-                                ),
-                            },
-                            { accessor: 'company', title: 'Company', sortable: true },
-                            {
-                                accessor: 'dob',
-                                title: 'Start Date',
-                                sortable: true,
-                                render: ({ dob }) => <div>{formatDate(dob)}</div>,
-                            },
+                            // {
+                            //     accessor: 'tenant_name',
+                            //     title: 'Name',
+                            //     sortable: true,
+                            //     render: ({ firstName, lastName, id }) => (
+                            //         <div className="flex items-center w-max">
+                            //             <img className="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src={`/assets/images/profile-${id}.jpeg`} alt="" />
+                            //             <div>{firstName + ' ' + lastName}</div>
+                            //         </div>
+                            //     ),
+                            // },
+                            { accessor: 'tenant_name', title: 'Name', sortable: true },
                             { accessor: 'email', title: 'Email', sortable: true },
                             { accessor: 'phone', title: 'Phone No.', sortable: true },
                             {
+                                accessor: 'is_active',
+                                title: 'Status', 
+                                sortable: true,
+                                render: ({ is_active }) => (
+                                  <span className={`px-2 py-1 rounded ${is_active ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                                    {is_active ? 'Active' : 'Inactive'}
+                                  </span>
+                                ),
+                              },
+                              {
                                 accessor: 'action',
                                 title: 'Action',
                                 titleClassName: '!text-center',
-                                render: () => (
-                                    <div className="flex items-center w-max mx-auto gap-2">
-                                        <Tippy content="Edit">
-                                            <button type="button">
-                                                <IconPencil />
-                                            </button>
-                                        </Tippy>
-                                        <Tippy content="Delete">
-                                            <button type="button">
-                                                <IconTrashLines />
-                                            </button>
-                                        </Tippy>
-                                    </div>
+                                render: ({ id }) => (
+                                  <div className="flex items-center w-max mx-auto gap-2">
+                                    <Tippy content="Edit">
+                                      <button type="button">
+                                        <IconPencil />
+                                      </button>
+                                    </Tippy>
+                                    <Tippy content="Delete">
+                                      <button type="button" onClick={() => handleDelete(id)}>
+                                        <IconTrashLines />
+                                      </button>
+                                    </Tippy>
+                                  </div>
                                 ),
-                            },
+                              },
                         ]}
                         totalRecords={initialRecords2.length}
                         recordsPerPage={pageSize2}
